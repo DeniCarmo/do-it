@@ -83,6 +83,30 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.resetPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  const hashedPass = await bcrypt.hash(password, 10);
+  const emailFound = await User.findOne({ email }).exec();
+
+  try {
+    if (!email || !password) {
+      return res.status(400).json({
+        msg: 'One or more fields are missing.',
+      });
+    }
+
+    if (emailFound) {
+      User.findOneAndUpdate({ email: email }, { password: hashedPass });
+    }
+
+    next();
+
+    return;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.tokenVerification = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
