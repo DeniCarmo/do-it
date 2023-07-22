@@ -5,6 +5,7 @@ import Register from './routes/Register';
 import Dashboard from './routes/Dashboard';
 import Header from './components/Header';
 import List from './routes/List';
+import LostPassword from './routes/LostPassword';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="register" element={<Register />}></Route>
         <Route path="dashboard" element={<Dashboard />}></Route>
         <Route path="list/:listId" element={<List />}></Route>
+        <Route path="lost-password" element={<LostPassword />}></Route>
       </Routes>
     </>
   );

@@ -1,15 +1,26 @@
-import { useParams } from 'react-router-dom';
-import { ListBody, ListContainer, ListContent, ListTitle } from '../styles/ListStyles';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  ListBody,
+  ListBottom,
+  ListContainer,
+  ListContent,
+  ListLink,
+  ListTitle,
+} from '../styles/ListStyles';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import getData from '../globals/request/getData';
 import ListItem from '../components/list/ListItem';
 import getToken from '../globals/request/getToken';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import { ItemButton } from '../styles/dashboard/ItemStyles';
 
 const List = () => {
   const { listId } = useParams();
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [listData, setListData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!getToken()) navigate('/');
@@ -34,7 +45,12 @@ const List = () => {
   return (
     <ListContainer>
       <ListBody>
-        <ListTitle>{listData ? listData.name : 'Loading'}</ListTitle>
+        <ListTitle>
+          <ListLink to={'/dashboard'}>
+            <ArrowBackIcon />
+          </ListLink>
+          {listData ? listData.name : 'Loading'}
+        </ListTitle>
 
         <ListContent>
           {listData !== null && listData.items.length
@@ -44,8 +60,16 @@ const List = () => {
                 );
               })
             : null}
-          <ListItem title="Add New Item" creator="true" />
         </ListContent>
+
+        <ListItem title="Add New Item" creator="true" />
+
+        <ListBottom>
+          <ItemButton>
+            <AssignmentTurnedInIcon />
+            Finish
+          </ItemButton>
+        </ListBottom>
       </ListBody>
     </ListContainer>
   );

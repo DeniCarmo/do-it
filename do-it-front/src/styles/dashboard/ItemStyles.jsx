@@ -57,6 +57,7 @@ export const ItemButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-flow: column;
   background-color: transparent;
   border: none;
   cursor: pointer;

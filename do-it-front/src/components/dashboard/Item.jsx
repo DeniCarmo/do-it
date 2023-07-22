@@ -10,14 +10,19 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useContext } from 'react';
 import { CreateListModalContext } from '../../contexts/CreateListModalContext';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Item = (props) => {
   const { title, content, done, creation, id, removeItem } = props;
   const { setModalOpen } = useContext(CreateListModalContext);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setModalOpen(1);
+  };
+
+  const navigateToList = () => {
+    navigate(`/list/${id}`);
   };
 
   return (
@@ -29,17 +34,20 @@ const Item = (props) => {
       <ItemFooter>
         {creation !== 'true' ? (
           <>
-            <Link to={`/list/${id}`}>
+            <ItemButton onClick={navigateToList}>
               <FileOpenIcon />
-            </Link>
+              Open
+            </ItemButton>
 
             <ItemButton onClick={() => removeItem(id)}>
               <DeleteIcon />
+              Delete
             </ItemButton>
           </>
         ) : (
           <ItemButton onClick={openModal}>
             <AddCircleIcon />
+            New
           </ItemButton>
         )}
       </ItemFooter>

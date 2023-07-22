@@ -47,6 +47,7 @@ export const FormButton = styled.button`
   min-height: 40px;
   border: none;
   border-radius: 5px;
+  background-color: #212529;
 `;
 
 export const FormButtons = styled.span`

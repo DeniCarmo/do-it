@@ -1,4 +1,4 @@
-import { LoginContainer, LoginTitle } from '../styles/LoginStyles';
+import { FormLink, FormText, LoginContainer, LoginTitle } from '../styles/LoginStyles';
 import { FormButton, FormContainer, FormInput, FormLabel } from '../styles/FormStyles';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -79,6 +79,11 @@ const Login = () => {
           />
 
           <FormButton onClick={formSubmit}>Login</FormButton>
+
+          <FormText>forgot your password?</FormText>
+          <FormText>
+            click <FormLink to={'/lost-password'}>here</FormLink> to recover it.
+          </FormText>
         </FormContainer>
       </div>
     </LoginContainer>
