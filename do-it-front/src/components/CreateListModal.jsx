@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { CreateListModalContext } from '../contexts/CreateListModalContext';
 import { useNavigate } from 'react-router-dom';
 import createList from '../globals/request/createList';
+import getToken from '../globals/request/getToken';
 
 const initialState = {
   name: '',
@@ -16,26 +17,10 @@ const initialState = {
 const CreateListModal = () => {
   const [formData, setFormData] = useState(initialState);
   const { modalOpen, setModalOpen } = useContext(CreateListModalContext);
-  const [accessToken, setAccessToken] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkToken = () => {
-      const token = localStorage.getItem('doitToken');
-      const tokenExp = localStorage.getItem('doitTokenExp');
-      const dateNow = new Date().getTime();
-
-      if (new Date(tokenExp).getTime() > dateNow) {
-        setAccessToken(token);
-      } else {
-        localStorage.removeItem('doitToken');
-        localStorage.removeItem('doitTokenExp');
-        navigate('/');
-      }
-    };
-
-    checkToken();
-    return;
+    if (!getToken()) navigate('/');
   }, []);
 
   const formHandle = (e) => {
@@ -58,6 +43,8 @@ const CreateListModal = () => {
       alert("Field name can't be blank.");
       return;
     }
+
+    formData._id = crypto.randomUUID();
 
     try {
       createList(formData);

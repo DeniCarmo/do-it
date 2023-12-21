@@ -23,9 +23,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData(setCurrentUser);
+  }, []);
+
+  useEffect(() => {
     if (currentUser) setUserLists(currentUser.lists);
-    return;
-  }, [currentUser]);
+  }, [currentUser, setCurrentUser]);
 
   const removeItem = (id) => {
     deleteList(id);

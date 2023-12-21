@@ -11,6 +11,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useContext } from 'react';
 import { CreateListModalContext } from '../../contexts/CreateListModalContext';
 import { useNavigate } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 
 const Item = (props) => {
   const { title, content, done, creation, id, removeItem } = props;
@@ -54,4 +55,14 @@ const Item = (props) => {
     </ItemContainer>
   );
 };
+
+Item.propTypes = {
+  title: PropTypes.string,
+  content: PropTypes.string,
+  done: PropTypes.bool,
+  creation: PropTypes.string,
+  id: PropTypes.string,
+  removeItem: PropTypes.func,
+};
+
 export default Item;

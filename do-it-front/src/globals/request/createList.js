@@ -3,12 +3,12 @@ import getToken from './getToken';
 
 const createList = async (formData) => {
   const accessToken = getToken();
+  const user = await axios.get(`http://localhost:8000/users?_id=${accessToken}`);
 
-  const res = await axios.post('http://localhost:3030/list/create', formData, {
-    withCredentials: true,
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  const data = await res.data;
+  console.log(user.data[0]);
+  user.data[0].lists.push(formData);
+
+  await axios.put(`http://localhost:8000/users/${accessToken}`, user.data[0]);
 };
 
 export default createList;

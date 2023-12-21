@@ -13,6 +13,7 @@ import addNewItem from '../../globals/request/addNewItem';
 import { Link, useParams } from 'react-router-dom';
 import updateItemStatus from '../../globals/request/updateItem';
 import deleteItem from '../../globals/request/deleteItem';
+import { PropTypes } from 'prop-types';
 
 const ListItem = (props) => {
   const { title, done, creator, id } = props;
@@ -79,5 +80,12 @@ const ListItem = (props) => {
       )}
     </ListItemContainer>
   );
+};
+
+ListItem.propTypes = {
+  title: PropTypes.string,
+  done: PropTypes.bool,
+  creator: PropTypes.string,
+  id: PropTypes.string,
 };
 export default ListItem;

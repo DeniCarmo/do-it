@@ -28,8 +28,7 @@ const List = () => {
 
   useEffect(() => {
     getData(setCurrentUser);
-    return;
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const setListInfo = async () => {
@@ -53,7 +52,7 @@ const List = () => {
         </ListTitle>
 
         <ListContent>
-          {listData !== null && listData.items.length
+          {listData !== null && listData.items && listData.items.length
             ? listData.items.map((item) => {
                 return (
                   <ListItem title={item.title} done={item.done} id={item._id} key={item._id} />

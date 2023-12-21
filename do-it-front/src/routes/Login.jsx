@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import getToken from '../globals/request/getToken';
+import { toast } from 'react-toastify';
 
 const initialState = {
   email: '',
@@ -32,24 +33,37 @@ const Login = () => {
   };
 
   const formSubmit = async (e) => {
+    let validateLogin = false;
+    let userId = null;
     e.preventDefault();
 
     const { email, password } = formData;
 
     if (!email || !password) {
-      alert('One or more fields are missing.');
+      toast('One or more fields are missing.');
       return;
     }
 
     try {
-      const res = await axios.post('http://localhost:3030/auth/login', formData, {
-        withCredentials: true,
-      });
+      const res = await axios.get('http://localhost:8000/users');
       const data = await res.data;
 
-      if (data.code === 200) {
-        setCookie(data.token, data.expiration);
+      if (data && data.length) {
+        data.forEach((user) => {
+          /* This step is usually done in the back end with encryption on the password for safety */
+          if (user.email === formData.email && user.password === formData.password) {
+            validateLogin = true;
+            userId = user._id;
+          }
+        });
+      }
+
+      if (validateLogin) {
+        /* Usually set in the back end with generated token and expiration date, this one is set to expire in one hour */
+        setCookie(userId, 1);
         navigate('/dashboard');
+      } else {
+        toast('User or password incorrect.');
       }
     } catch (err) {
       console.log(err);

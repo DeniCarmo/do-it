@@ -5,12 +5,9 @@ const getData = async (setCurrentUSer) => {
   const accessToken = getToken();
 
   try {
-    const res = await axios.get('http://localhost:3030/auth/dashboard', {
-      withCredentials: true,
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const res = await axios.get(`http://localhost:8000/users/${accessToken}`);
     const data = await res.data;
-    setCurrentUSer(data.user);
+    setCurrentUSer(data);
   } catch (err) {
     console.log(err);
   }

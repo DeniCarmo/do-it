@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "_id": "728ad5dd-aa36-4582-a7f4-60b35d307e41",
+      "username": "test",
+      "email": "test@test.com",
+      "password": "123",
+      "passwordConfirm": "123",
+      "lists": [
+        {
+          "name": "Test List",
+          "description": "",
+          "_id": "bfa628e3-bfa5-482d-8c1f-c4dc85ba7571"
+        },
+        {
+          "name": "Test List2",
+          "description": "",
+          "_id": "a280f518-b575-4a90-9521-fd0ab9a866c1"
+        },
+        {
+          "name": "Test List3",
+          "description": "",
+          "_id": "fd1ada6f-6781-493e-9813-af8df97910b0"
+        }
+      ]
+    }
+  ]
+}

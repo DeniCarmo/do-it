@@ -3,12 +3,55 @@ import { FormButton, FormContainer, FormInput, FormLabel } from '../styles/FormS
 import { RegisterContainer, RegisterTitle } from '../styles/RegisterStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const initialState = {
+  _id: '',
   username: '',
   email: '',
   password: '',
   passwordConfirm: '',
+};
+
+const getAllUsers = async () => {
+  try {
+    const res = await axios.get(`http://localhost:8000/users`);
+    let data = await res.data;
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const userExists = async (id, email) => {
+  let users = await getAllUsers();
+  let emailExits = false;
+  let idExists = false;
+
+  if (users && users.length > 0) {
+    users.forEach((user) => {
+      if (user._id === id && user.email === email) {
+        emailExits = true;
+        idExists = true;
+      }
+
+      if (user._id === id) {
+        idExists = true;
+      }
+
+      if (user.email === email) {
+        emailExits = true;
+      }
+    });
+  }
+
+  if (emailExits && idExists) return 'Email and id already registered';
+
+  if (idExists) return 'ID already registered';
+
+  if (emailExits) return 'Email already registered';
+
+  if (!emailExits && !idExists) return 'ok';
 };
 
 const Register = () => {
@@ -36,15 +79,20 @@ const Register = () => {
       return;
     }
 
-    try {
-      const res = await axios.post('http://localhost:3030/auth/register', formData);
-      const data = await res.data;
+    formData._id = crypto.randomUUID();
+    formData.lists = [];
 
-      if (data.code === 200) {
+    if ((await userExists(formData._id, formData.email)) === 'ok') {
+      try {
+        const res = await axios.post('http://localhost:8000/users', formData);
+
         navigate('/');
+        toast('Registration successful');
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      toast(await userExists(formData._id, formData.email));
     }
   };
 

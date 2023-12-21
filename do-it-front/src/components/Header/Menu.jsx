@@ -15,10 +15,8 @@ const Menu = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (!currentUser) {
-      navigate('/');
-    }
-  }, [currentUser]);
+    if (!getToken()) navigate('/');
+  }, []);
 
   const logoutUser = () => {
     logout();
