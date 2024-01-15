@@ -27,7 +27,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (currentUser) setUserLists(currentUser.lists);
-  }, [currentUser, setCurrentUser]);
+  }, [currentUser]);
 
   const removeItem = (id) => {
     deleteList(id);
@@ -56,7 +56,6 @@ const Dashboard = () => {
                 );
               })
             : null}
-
           <CreateListModal />
 
           <Item

@@ -31,14 +31,13 @@ const List = () => {
   }, []);
 
   useEffect(() => {
-    const setListInfo = async () => {
+    const setListInfo = () => {
       let listItemArr = null;
       listItemArr = currentUser.lists.filter((list) => list._id === listId);
       setListData(listItemArr[0]);
     };
 
     if (currentUser) setListInfo();
-    return;
   }, [currentUser]);
 
   return (
