@@ -19,7 +19,7 @@ export const DashboardItemContainer = styled.div`
   height: auto;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
   grid-gap: 20px;
 `;

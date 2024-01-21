@@ -16,22 +16,23 @@ const Dashboard = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [userLists, setUserLists] = useState(null);
   const navigate = useNavigate();
+  const [refresh, setResfresh] = useState();
 
   useEffect(() => {
     if (!getToken()) navigate('/');
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
-    getData(setCurrentUser);
-  }, []);
+    getData().then((data) => {
+      setCurrentUser(data);
+      setUserLists(data.lists);
+    });
+  }, [refresh, setCurrentUser]);
 
-  useEffect(() => {
-    if (currentUser) setUserLists(currentUser.lists);
-  }, [currentUser]);
-
-  const removeItem = (id) => {
-    deleteList(id);
-    getData(setCurrentUser);
+  const removeItem = async (id) => {
+    await deleteList(id);
+    const data = await getData();
+    setUserLists(data.lists);
   };
 
   return (
@@ -56,12 +57,12 @@ const Dashboard = () => {
                 );
               })
             : null}
-          <CreateListModal />
+          <CreateListModal refreshList={setResfresh} />
 
           <Item
             title="Create a new list"
             content="Click the button bellow to create a new list."
-            creation={'true'}
+            creation
           />
         </DashboardItemContainer>
       </div>

@@ -1,27 +1,29 @@
+import createList from '../globals/request/createList';
+import getToken from '../globals/request/getToken';
+import { CreateListModalContext } from '../contexts/CreateListModalContext';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { FormLabel } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { FormButton, FormButtons, FormContainer, FormInput, FormTitle } from '../styles/FormStyles';
 import { GeneralText } from '../styles/GeneralStyles';
 import { ModalClose, ModalContainer, ModalMask } from '../styles/ModalStyles';
-import { useContext, useEffect, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import { CreateListModalContext } from '../contexts/CreateListModalContext';
-import { useNavigate } from 'react-router-dom';
-import createList from '../globals/request/createList';
-import getToken from '../globals/request/getToken';
 
 const initialState = {
   name: '',
   description: '',
 };
 
-const CreateListModal = () => {
+const CreateListModal = ({ refreshList }) => {
   const [formData, setFormData] = useState(initialState);
   const { modalOpen, setModalOpen } = useContext(CreateListModalContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!getToken()) navigate('/');
-  }, []);
+  }, [navigate]);
 
   const formHandle = (e) => {
     const { name, value } = e.target;
@@ -47,7 +49,8 @@ const CreateListModal = () => {
     formData._id = crypto.randomUUID();
 
     try {
-      createList(formData);
+      await createList(formData);
+      refreshList(true);
       setModalOpen(0);
     } catch (err) {
       console.log(err);
@@ -60,6 +63,7 @@ const CreateListModal = () => {
         <ModalClose onClick={(e) => closeModal(e)}>
           <CloseIcon />
         </ModalClose>
+
         <FormContainer modal={1}>
           <FormTitle as="h2" className="mb-2">
             New List
@@ -92,5 +96,9 @@ const CreateListModal = () => {
       </ModalContainer>
     </ModalMask>
   );
+};
+
+CreateListModal.propTypes = {
+  refreshList: PropTypes.func,
 };
 export default CreateListModal;

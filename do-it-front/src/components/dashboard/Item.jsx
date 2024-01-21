@@ -33,7 +33,7 @@ const Item = (props) => {
       <ItemContent>{content ? content : ''}</ItemContent>
 
       <ItemFooter>
-        {creation !== 'true' ? (
+        {!creation ? (
           <>
             <ItemButton onClick={navigateToList}>
               <FileOpenIcon />
@@ -60,7 +60,7 @@ Item.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   done: PropTypes.bool,
-  creation: PropTypes.string,
+  creation: PropTypes.bool,
   id: PropTypes.string,
   removeItem: PropTypes.func,
 };
