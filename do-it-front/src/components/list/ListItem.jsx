@@ -15,8 +15,7 @@ import updateItemStatus from '../../globals/request/updateItem';
 import deleteItem from '../../globals/request/deleteItem';
 import { PropTypes } from 'prop-types';
 
-const ListItem = (props) => {
-  const { title, done, creator, id } = props;
+const ListItem = ({ title, done, creator, id, refreshList }) => {
   const [itemTitle, setItemTitle] = useState('');
   const { listId } = useParams();
 
@@ -26,21 +25,40 @@ const ListItem = (props) => {
     setItemTitle((v) => ({ ...v, [name]: value }));
   };
 
-  const addItem = () => {
+  const addItem = async () => {
     if (!itemTitle) {
       alert('Item title must be filled.');
       return;
     }
 
-    addNewItem(itemTitle, listId);
+    try {
+      await addNewItem(itemTitle.title, listId);
+      /*
+        Updates the value with random numbers to ensure a different value 
+        will be send and trigger the useEffect hook.
+      */
+      refreshList(Math.random());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const updateItem = (v) => {
-    updateItemStatus(v, id, listId);
+  const updateItem = async (v) => {
+    try {
+      await updateItemStatus(v, id, listId);
+      refreshList(Math.random());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const deleteListItem = () => {
-    deleteItem(id, listId);
+  const deleteListItem = async () => {
+    try {
+      await deleteItem(id, listId);
+      refreshList(Math.random());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -56,15 +74,15 @@ const ListItem = (props) => {
         <ListItemTitle>{title}</ListItemTitle>
       )}
 
-      {creator !== 'true' ? (
+      {!creator ? (
         <ListItemButtons>
           {done ? (
             <Link>
-              <CheckBoxIcon onClick={(e) => updateItem(false)} />
+              <CheckBoxIcon onClick={() => updateItem(false)} />
             </Link>
           ) : (
             <Link>
-              <CheckBoxOutlineBlankIcon onClick={(e) => updateItem(true)} />
+              <CheckBoxOutlineBlankIcon onClick={() => updateItem(true)} />
             </Link>
           )}
           <Link>
@@ -85,7 +103,8 @@ const ListItem = (props) => {
 ListItem.propTypes = {
   title: PropTypes.string,
   done: PropTypes.bool,
-  creator: PropTypes.string,
+  creator: PropTypes.bool,
   id: PropTypes.string,
+  refreshList: PropTypes.func,
 };
 export default ListItem;

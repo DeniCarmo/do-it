@@ -15,11 +15,13 @@ import getToken from '../globals/request/getToken';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { ItemButton } from '../styles/dashboard/ItemStyles';
+import deleteList from '../globals/request/deleteList';
 
 const List = () => {
   const { listId } = useParams();
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [listData, setListData] = useState(null);
+  const [refresh, setRefresh] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +29,10 @@ const List = () => {
   }, []);
 
   useEffect(() => {
-    getData(setCurrentUser);
-  }, []);
+    getData().then((data) => {
+      setCurrentUser(data);
+    });
+  }, [refresh, setCurrentUser]);
 
   useEffect(() => {
     const setListInfo = () => {
@@ -39,6 +43,15 @@ const List = () => {
 
     if (currentUser) setListInfo();
   }, [currentUser]);
+
+  const finishList = async () => {
+    try {
+      await deleteList(listId);
+      navigate('/dashboard');
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ListContainer>
@@ -54,15 +67,21 @@ const List = () => {
           {listData !== null && listData.items && listData.items.length
             ? listData.items.map((item) => {
                 return (
-                  <ListItem title={item.title} done={item.done} id={item._id} key={item._id} />
+                  <ListItem
+                    title={item.title}
+                    done={item.done}
+                    id={item._id}
+                    key={item._id}
+                    refreshList={setRefresh}
+                  />
                 );
               })
             : null}
         </ListContent>
 
-        <ListItem title="Add New Item" creator="true" />
+        <ListItem title="Add New Item" creator refreshList={setRefresh} />
 
-        <ListBottom>
+        <ListBottom onClick={finishList}>
           <ItemButton>
             <AssignmentTurnedInIcon />
             Finish

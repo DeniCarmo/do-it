@@ -3,13 +3,18 @@ import getToken from './getToken';
 
 const addNewItem = async (title, listId) => {
   const accessToken = getToken();
+  const newItem = {
+    _id: crypto.randomUUID(),
+    title,
+    done: false,
+  };
 
-  const res = await axios.post(`http://localhost:8000/users/${accessToken}`);
+  const res = await axios.get(`http://localhost:8000/users/${accessToken}`);
   const data = await res.data;
 
-  const newListArray = data.lists.filter((list) => list._id === listId);
+  const listIndex = data.lists.findIndex((list) => list._id === listId);
 
-  data.lists.splice(0, data.lists.length, ...newListArray);
+  data.lists[listIndex].items.push(newItem);
 
   await axios.put(`http://localhost:8000/users/${accessToken}`, data);
 };

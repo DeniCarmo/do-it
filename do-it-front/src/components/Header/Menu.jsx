@@ -18,9 +18,14 @@ const Menu = () => {
     if (!getToken()) navigate('/');
   }, []);
 
-  const logoutUser = () => {
-    logout();
-    setCurrentUser(null);
+  const logoutUser = async () => {
+    try {
+      await logout();
+      setCurrentUser(null);
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

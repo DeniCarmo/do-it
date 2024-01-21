@@ -50,7 +50,8 @@ const CreateListModal = ({ refreshList }) => {
 
     try {
       await createList(formData);
-      refreshList(true);
+      refreshList(Math.random());
+      setFormData(initialState);
       setModalOpen(0);
     } catch (err) {
       console.log(err);
